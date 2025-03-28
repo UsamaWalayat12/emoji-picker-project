@@ -1,16 +1,6 @@
-import type { Metadata } from "next"
-import dynamic from "next/dynamic"
+ import type { Metadata } from "next"
 import { generateMetadata as generateDefaultMetadata } from "@/components/seo/default-meta"
-
-// Import the emoji detail component with no SSR to avoid hydration issues
-const EmojiDetailClient = dynamic(() => import("@/components/emoji-detail-client"), {
-  ssr: false,
-  loading: () => (
-    <div className="container mx-auto py-8 px-4">
-      <div className="h-screen bg-muted/20 animate-pulse rounded-lg"></div>
-    </div>
-  ),
-})
+import EmojiDetailWrapper from "@/components/emoji-detail-wrapper"
 
 // Generate metadata dynamically based on the emoji
 export async function generateMetadata({ params }: { params: { unicode: string } }): Promise<Metadata> {
@@ -25,7 +15,7 @@ export async function generateMetadata({ params }: { params: { unicode: string }
   })
 }
 
-export default function EmojiDetail() {
-  return <EmojiDetailClient />
+export default function EmojiDetail({ params }: { params: { unicode: string } }) {
+  return <EmojiDetailWrapper unicodeParam={decodeURIComponent(params.unicode)} />
 }
 
